@@ -1,13 +1,18 @@
 import imutils
 import cv2
 import numpy as np
-
+from src.models.cnn import model_1
+from keras.preprocessing.image import img_to_array
 
 detection_model_path = '../cascades/haarcascades/haarcascade_frontalface_default.xml'
 
 face_detection = cv2.CascadeClassifier(detection_model_path)
 EMOTIONS = ["angry", "disgust", "scared", "happy", "sad", "surprised", "neutral"]
 
+# load the model
+model_path = '../60_accu_model.ckpt'
+model = model_1()
+model.load_weights(model_path)
 
 cv2.namedWindow('your_face')
 camera = cv2.VideoCapture(0)
@@ -27,16 +32,21 @@ while True:
         # detect face pos
         (fX, fY, fW, fH) = faces
 
-        # must be replaced by the model output.
-        # model must be called on the image of our face, in grey, of shape (48, 48, 1)
-        preds = np.random.rand(7)
-        preds = preds / sum(preds)
-        emotion_probability = np.max(preds)
-        label = EMOTIONS[preds.argmax()]
+        # extract face and reshape it to (48, 48, 1)
+        face = gray[fY:fY + fH, fX:fX + fW]
+        face = cv2.resize(face, (48, 48))
+        face = face.astype("float") / 255.0
+        face = img_to_array(face)
+        face = np.expand_dims(face, axis=0)
+
+        # predict on the model
+        prediction = model.predict(face)[0]
+        label = EMOTIONS[prediction.argmax()]
+
     else:
         continue
 
-    for (i, (emotion, prob)) in enumerate(zip(EMOTIONS, preds)):
+    for (i, (emotion, prob)) in enumerate(zip(EMOTIONS, prediction)):
         text = "{}: {:.2f}%".format(emotion, prob * 100)
 
         w = int(prob * 300)
