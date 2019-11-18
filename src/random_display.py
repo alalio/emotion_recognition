@@ -1,7 +1,7 @@
 import imutils
 import cv2
 import numpy as np
-from src.models.cnn import model_1
+from src.models.cnn import model_1, model_2, model_ref, model_1_2
 from keras.preprocessing.image import img_to_array
 
 detection_model_path = '../cascades/haarcascades/haarcascade_frontalface_default.xml'
@@ -10,8 +10,8 @@ face_detection = cv2.CascadeClassifier(detection_model_path)
 EMOTIONS = ["angry", "disgust", "scared", "happy", "sad", "surprised", "neutral"]
 
 # load the model
-model_path = '../60_accu_model.ckpt'
-model = model_1()
+model_path = '../63_accu_model_2.ckpt'
+model = model_2()
 model.load_weights(model_path)
 
 cv2.namedWindow('your_face')
@@ -22,7 +22,7 @@ while True:
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # detect face
-    faces = face_detection.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), flags=cv2.CASCADE_SCALE_IMAGE)
+    faces = face_detection.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(48, 48), flags=cv2.CASCADE_SCALE_IMAGE)
 
     canvas = np.zeros((250, 300, 3), dtype="uint8")
     frameClone = frame.copy()
@@ -35,7 +35,7 @@ while True:
         # extract face and reshape it to (48, 48, 1)
         face = gray[fY:fY + fH, fX:fX + fW]
         face = cv2.resize(face, (48, 48))
-        face = face.astype("float") / 255.0
+        #face = face.astype("float") / 255.0
         face = img_to_array(face)
         face = np.expand_dims(face, axis=0)
 
