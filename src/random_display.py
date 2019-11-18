@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 from src.models.cnn import model_1, model_2, model_ref, model_1_2
 from keras.preprocessing.image import img_to_array
+import os
 
 detection_model_path = '../cascades/haarcascades/haarcascade_frontalface_default.xml'
 
@@ -10,9 +11,18 @@ face_detection = cv2.CascadeClassifier(detection_model_path)
 EMOTIONS = ["angry", "disgust", "scared", "happy", "sad", "surprised", "neutral"]
 
 # load the model
-model_path = '../63_accu_model_2.ckpt'
+# Local files
+local_model_path = '../63_accu_model_2.ckpt'
+local_model_path2 = '63_accu_model_2.ckpt'
+
+model_path_r = ""
+if os.path.isfile(local_model_path2):
+    model_path_r = local_model_path2
+elif os.path.isfile(local_model_path):
+    model_path_r = local_model_path
+
 model = model_2()
-model.load_weights(model_path)
+model.load_weights(model_path_r)
 
 cv2.namedWindow('your_face')
 camera = cv2.VideoCapture(0)
