@@ -2,11 +2,20 @@ import pandas as pd
 import numpy as np
 from operator import methodcaller
 from keras.utils.np_utils import to_categorical
+import os
 
-data_path = '/content/drive/My Drive/abdou/emotion_detection/fer2013.csv'
+# Drive
+drive_data_path = '/content/drive/My Drive/abdou/emotion_detection/fer2013.csv'
+
+# Local
+local_data_path = '../data/fer2013/fer2013.csv'
+local_data_path2 = 'data/fer2013/fer2013.csv'
+
+
 img_size = (48, 48)
 
 emotions_dict = {1: "angry", 2: "disgust", 3: "scared", 4: "happy", 5: "sad", 6: "surprised", 7: "neutral"}
+
 
 def preprocess_data(data):
   for i in range(len(data)):
@@ -17,7 +26,9 @@ def preprocess_data(data):
 
 
 def load_data(data_path, train_val_split=0.8):
+    print("Using path " + data_path)
     data = pd.read_csv(data_path)
+    print("CSV read !")
     data_train = data[data['Usage'] == 'Training']
     data_test = data[data['Usage'] != 'Training']
 
@@ -51,5 +62,14 @@ def load_data(data_path, train_val_split=0.8):
 
     return x_train, y_train, x_val, y_val, x_test, y_test
 
-
-x_train, y_train, x_val, y_val, x_test, y_test = load_data(data_path)
+# OFF
+"""
+data_path_r = None
+if os.path.isfile(local_data_path2):
+    data_path_r = local_data_path2
+elif os.path.isfile(local_data_path):
+    data_path_r = local_data_path
+else:
+    data_path_r = drive_data_path
+"""
+# x_train, y_train, x_val, y_val, x_test, y_test = load_data(data_path_r)
