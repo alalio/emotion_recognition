@@ -1,28 +1,34 @@
 import imutils
-import cv2
 import numpy as np
+import cv2
 from src.models.cnn import model_1, model_2, model_ref, model_1_2
 from keras.preprocessing.image import img_to_array
 import os
 
-detection_model_path = '../cascades/haarcascades/haarcascade_frontalface_default.xml'
+detection_model_path = None
+detection_model_path1 = '../cascades/haarcascades/haarcascade_frontalface_default.xml'
+detection_model_path2 = 'cascades/haarcascades/haarcascade_frontalface_default.xml'
+
+if os.path.isfile(detection_model_path1):
+    detection_model_path = detection_model_path1
+elif os.path.isfile(detection_model_path2):
+    detection_model_path = detection_model_path1
 
 face_detection = cv2.CascadeClassifier(detection_model_path)
 EMOTIONS = ["angry", "disgust", "scared", "happy", "sad", "surprised", "neutral"]
 
 # load the model
-# Local files
-local_model_path = '../63_accu_model_2.ckpt'
+local_model_path = None
+local_model_path1 = '../63_accu_model_2.ckpt'
 local_model_path2 = '63_accu_model_2.ckpt'
 
-model_path_r = ""
 if os.path.isfile(local_model_path2):
-    model_path_r = local_model_path2
-elif os.path.isfile(local_model_path):
-    model_path_r = local_model_path
+    local_model_path = local_model_path2
+elif os.path.isfile(local_model_path1):
+    local_model_path = local_model_path1
 
 model = model_2()
-model.load_weights(model_path_r)
+model.load_weights(local_model_path)
 
 cv2.namedWindow('your_face')
 camera = cv2.VideoCapture(0)
@@ -45,7 +51,7 @@ while True:
         # extract face and reshape it to (48, 48, 1)
         face = gray[fY:fY + fH, fX:fX + fW]
         face = cv2.resize(face, (48, 48))
-        #face = face.astype("float") / 255.0
+        # face = face.astype("float") / 255.0
         face = img_to_array(face)
         face = np.expand_dims(face, axis=0)
 
