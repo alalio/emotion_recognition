@@ -2,6 +2,7 @@ imutils
 tensorflow==1.15
 keras==2.3.0
 opencv-python
+opencv-contrib-python
 matplotlib
 numpy
 pandas

@@ -8,6 +8,9 @@ Possible emotions:
 * angry
 * happy
 * neutral
+* disgust
+* scared
+* surprised
 
 ## Install Requirements
 
@@ -29,6 +32,8 @@ chmod +x run_train.sh
 ```
 
 ### Use Emotion Recognition
+
+* Require a camera on the device
 
 ```sh
 chmod +x run_display.sh

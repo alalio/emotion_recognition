@@ -5,6 +5,7 @@ from src.models.cnn import model_1, model_2, model_ref, model_1_2
 from keras.preprocessing.image import img_to_array
 import os
 
+
 detection_model_path = None
 detection_model_path1 = '../cascades/haarcascades/haarcascade_frontalface_default.xml'
 detection_model_path2 = 'cascades/haarcascades/haarcascade_frontalface_default.xml'
@@ -32,9 +33,12 @@ model.load_weights(local_model_path)
 
 cv2.namedWindow('your_face')
 camera = cv2.VideoCapture(0)
+
 while True:
     frame = camera.read()[1]
     frame = imutils.resize(frame, width=300)
+
+
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # detect face
