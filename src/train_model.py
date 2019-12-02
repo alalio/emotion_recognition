@@ -2,7 +2,7 @@ from src.load_data import load_data
 from src.models.cnn import model_1
 from keras.callbacks import ModelCheckpoint
 import os
-
+import pickle
 
 continue_training = True
 
@@ -32,7 +32,10 @@ save_model_callback = ModelCheckpoint(filepath=save_path, verbose=1)
 if continue_training and os.path.isfile(save_path):
     model.load_weights(save_path)
 
-model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=1000, batch_size=100, callbacks=[save_model_callback])
-    
+history = model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=50,
+                    batch_size=100, callbacks=[save_model_callback])
+
+pickle.dump(history, open("history.bin", "wb"))
+
 save_path_2 = "save_model_2.ckpt"
 model.save(save_path_2)
