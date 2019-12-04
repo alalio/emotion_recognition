@@ -13,7 +13,7 @@ detection_model_path2 = 'cascades/haarcascades/haarcascade_frontalface_default.x
 if os.path.isfile(detection_model_path1):
     detection_model_path = detection_model_path1
 elif os.path.isfile(detection_model_path2):
-    detection_model_path = detection_model_path1
+    detection_model_path = detection_model_path2
 
 face_detection = cv2.CascadeClassifier(detection_model_path)
 EMOTIONS = ["angry", "disgust", "scared", "happy", "sad", "surprised", "neutral"]
